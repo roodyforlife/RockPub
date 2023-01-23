@@ -34,6 +34,7 @@ namespace RockPub.Controllers
             }
 
             var hall = await _context.Halls
+                .Include(x => x.Places)
                 .FirstOrDefaultAsync(m => m.HallId == id);
             if (hall == null)
             {

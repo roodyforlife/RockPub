@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockPub.DataBase;
+using RockPub.Enums;
 using RockPub.Models;
 
 namespace RockPub.Controllers
@@ -20,9 +23,79 @@ namespace RockPub.Controllers
         }
 
         // GET: Dishes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int quantityFrom, int quantityTo, int weightFrom, int weightTo, string name, DishSort sort = DishSort.NameAsc)
         {
-            var dataBaseContext = _context.Dishes.Include(d => d.Category);
+            IQueryable<Dish> dataBaseContext = _context.Dishes.Include(d => d.Category);
+
+            if (!String.IsNullOrEmpty(name))
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.Name.Contains(name));
+            }
+
+            if (quantityTo == 0)
+            {
+                quantityTo = dataBaseContext.Max(x => x.Quantity);
+            }
+
+            if (weightTo == 0)
+            {
+                weightTo = dataBaseContext.Max(x => x.Weight);
+            }
+
+            dataBaseContext = dataBaseContext.Where(x => x.Quantity >= quantityFrom);
+            dataBaseContext = dataBaseContext.Where(x => x.Quantity <= quantityTo);
+            dataBaseContext = dataBaseContext.Where(x => x.Weight>= weightFrom);
+            dataBaseContext = dataBaseContext.Where(x => x.Weight <= weightTo);
+
+            switch (sort)
+            {
+                case DishSort.NameDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.Name);
+                    break;
+                case DishSort.CostAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Cost);
+                    break;
+                case DishSort.CostDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.Cost);
+                    break;
+                case DishSort.KilocaloriesAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Kilocalories);
+                    break;
+                case DishSort.KilocaloriesDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.Kilocalories);
+                    break;
+                case DishSort.WeightAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Weight);
+                    break;
+                case DishSort.CreateDateAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.CreateDate);
+                    break;
+                case DishSort.CreateDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.CreateDate);
+                    break;
+                default:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Name);
+                    break;
+            }
+
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(DishSort)).Cast<DishSort>()
+               .Select(x => new SelectListItem
+               {
+                   Text = x.GetType()
+           .GetMember(x.ToString())
+           .FirstOrDefault()
+           .GetCustomAttribute<DisplayAttribute>()?
+           .GetName(),
+                   Value = x.ToString(),
+                   Selected = (x == sort)
+               }).ToList();
+
+            ViewBag.Name = name;
+            ViewBag.QuantityFrom = quantityFrom;
+            ViewBag.QuantityTo = quantityTo;
+            ViewBag.WeightFrom = weightFrom;
+            ViewBag.WeightTo = weightTo;
+
             return View(await dataBaseContext.ToListAsync());
         }
 

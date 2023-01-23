@@ -35,6 +35,9 @@ namespace RockPub.Controllers
             }
 
             var order = await _context.Orders
+                .Include(x => x.DishOrders)
+                .ThenInclude(x => x.Dish)
+                .ThenInclude(x => x.Category)
                 .Include(o => o.Place)
                 .Include(o => o.Staff)
                 .FirstOrDefaultAsync(m => m.OrderId == id);

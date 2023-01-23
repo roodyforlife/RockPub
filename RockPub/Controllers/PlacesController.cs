@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockPub.DataBase;
+using RockPub.Enums;
 using RockPub.Models;
 
 namespace RockPub.Controllers
@@ -20,9 +23,52 @@ namespace RockPub.Controllers
         }
 
         // GET: Places
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string hallName, int placeNumber, PlaceSort sort = PlaceSort.PlaceNumberAsc)
         {
-            return View(await _context.Places.ToListAsync());
+            IQueryable<Place> places = _context.Places.Include(x => x.Hall);
+
+            if (!String.IsNullOrEmpty(hallName))
+            {
+                places = places.Where(x => x.Hall.HallName.Contains(hallName));
+            }
+
+            if(placeNumber != 0)
+            {
+                places = places.Where(x => x.PlaceNumber == placeNumber);
+            }
+
+            switch (sort)
+            {
+                case PlaceSort.PlaceNumberDesc:
+                    places = places.OrderByDescending(x => x.PlaceNumber);
+                    break;
+                case PlaceSort.HallNameAsc:
+                    places = places.OrderBy(x => x.Hall.HallName);
+                    break;
+                case PlaceSort.HallNameDesc:
+                    places = places.OrderByDescending(x => x.Hall.HallName);
+                    break;
+                default:
+                    places = places.OrderBy(x => x.PlaceNumber);
+                    break;
+            }
+
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(PlaceSort)).Cast<PlaceSort>()
+               .Select(x => new SelectListItem
+               {
+                   Text = x.GetType()
+           .GetMember(x.ToString())
+           .FirstOrDefault()
+           .GetCustomAttribute<DisplayAttribute>()?
+           .GetName(),
+                   Value = x.ToString(),
+                   Selected = (x == sort)
+               }).ToList();
+
+            ViewBag.HallName = hallName;
+            ViewBag.PlaceNumber = placeNumber;
+
+            return View(await places.ToListAsync());
         }
 
         // GET: Places/Details/5
@@ -34,6 +80,7 @@ namespace RockPub.Controllers
             }
 
             var place = await _context.Places
+                .Include(x => x.Hall)
                 .FirstOrDefaultAsync(m => m.PlaceId == id);
             if (place == null)
             {

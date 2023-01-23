@@ -6,6 +6,42 @@
 
 <h1>Index</h1>
 
+<form asp-action="Index" method="post">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Dish name</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Default" value="@ViewBag.Name" name="name" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Weight from</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.WeightFrom" name="weightFrom" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Weight to</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.WeightTo" name="weightTo" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Quantity from</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.QuantityFrom" name="quantityFrom" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Quantity to</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.QuantityTo" name="quantityTo" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend ml-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Sort</span>
+        </div>
+        <select class="custom-select" name="sort" id="inputGroupSelect01" asp-items="@ViewBag.Sort"></select>
+    </div>
+
+    <div class="input-group mb-3">
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+</form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
