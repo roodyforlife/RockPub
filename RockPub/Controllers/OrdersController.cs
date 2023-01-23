@@ -110,6 +110,15 @@ namespace RockPub.Controllers
                 try
                 {
                     _context.Update(order);
+                    if (order.IsCompleted)
+                    {
+                        List<DishOrder> dishOrders = _context.DishOrders.Include(x => x.Dish).Where(x => x.OrderId == order.OrderId).ToList();
+                        foreach(DishOrder item in dishOrders)
+                        {
+                            item.Dish.Quantity -= item.Quantity;
+                            _context.Update(item.Dish);
+                        }
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

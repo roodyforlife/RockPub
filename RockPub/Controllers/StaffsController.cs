@@ -254,14 +254,19 @@ namespace RockPub.Controllers
             List<Staff> staffs = _context.Staffs
                 .Include(x => x.Orders)
                 .ThenInclude(x => x.DishOrders)
-                .ThenInclude(x => x.Dish)
-                .Where(x => (DateTime.Now.Subtract(x.EmploymentDate).Days) >= 30).ToList();
+                .ThenInclude(x => x.Dish).AsEnumerable()
+                .Where(x => (DateTime.Now - x.EmploymentDate).Days >= 30).ToList();
+
             foreach (Staff staff in staffs)
             {
                 var totalCost = 0;
-                foreach (Order orders in staff.Orders)
+                if (staff.Orders.Count > 0)
                 {
-                    totalCost += orders.DishOrders.Sum(x => (x.Dish.Cost * x.Quantity));
+                    foreach (Order order in staff.Orders)
+                    {
+                        if (order.IsPaid)
+                        totalCost += order.DishOrders.Sum(x => (x.Dish.Cost * x.Quantity));
+                    }
                 }
 
                 if (totalCost < 10000)

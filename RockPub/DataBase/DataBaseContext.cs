@@ -27,8 +27,8 @@ namespace RockPub.DataBase
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // optionsBuilder.UseSqlServer("Server=DESKTOP-KIV92L3;Database=RockPub;Trusted_Connection=True;Encrypt=False;");
-            optionsBuilder.UseSqlServer("Server=DESKTOP-I75L3P7;Database=RockPub;Trusted_Connection=True;Encrypt=False;");
-            // optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=RockPub;Trusted_Connection=True;");
+            // optionsBuilder.UseSqlServer("Server=DESKTOP-I75L3P7;Database=RockPub;Trusted_Connection=True;Encrypt=False;");
+             optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=RockPub;Trusted_Connection=True;");
         }
     }
 }

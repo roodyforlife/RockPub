@@ -61,12 +61,19 @@ namespace RockPub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DishOrderId,DishId,OrderId,Quantity")] DishOrder dishOrder)
         {
+            Dish dish = _context.Dishes.FirstOrDefault(x => x.DishId == dishOrder.DishId);
+            if (dish.Quantity < dishOrder.Quantity)
+            {
+                ModelState.AddModelError("Quantity", "Invalid quantity. We don't have that many");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(dishOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "Name", dishOrder.DishId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", dishOrder.OrderId);
             return View(dishOrder);
