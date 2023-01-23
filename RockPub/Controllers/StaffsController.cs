@@ -247,5 +247,33 @@ namespace RockPub.Controllers
         {
             return _context.Staffs.Any(e => e.StaffId == id);
         }
+
+        //Automation
+        public async Task<IActionResult> Automation()
+        {
+            List<Staff> staffs = _context.Staffs
+                .Include(x => x.Orders)
+                .ThenInclude(x => x.DishOrders)
+                .ThenInclude(x => x.Dish)
+                .Where(x => (DateTime.Now.Subtract(x.EmploymentDate).Days) >= 30).ToList();
+            foreach (Staff staff in staffs)
+            {
+                var totalCost = 0;
+                foreach (Order orders in staff.Orders)
+                {
+                    totalCost += orders.DishOrders.Sum(x => (x.Dish.Cost * x.Quantity));
+                }
+
+                if (totalCost < 10000)
+                {
+                    staff.Salary = ((staff.Salary * 95) / 100);
+                }
+            }
+
+            _context.Staffs.UpdateRange(staffs);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
