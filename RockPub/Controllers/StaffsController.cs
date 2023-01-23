@@ -248,7 +248,7 @@ namespace RockPub.Controllers
             return _context.Staffs.Any(e => e.StaffId == id);
         }
 
-        //Automation
+        // Automation
         public async Task<IActionResult> Automation()
         {
             List<Staff> staffs = _context.Staffs
