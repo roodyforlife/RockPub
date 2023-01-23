@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace RockPub.Models
         public int DishId { get; set; }
         public Order Order { get; set; }
         public int OrderId { get; set; }
+        [Required(ErrorMessage = "Empty field")]
         public int Quantity { get; set; }
     }
 }

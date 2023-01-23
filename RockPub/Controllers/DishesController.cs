@@ -34,12 +34,14 @@ namespace RockPub.Controllers
 
             if (quantityTo == 0)
             {
-                quantityTo = dataBaseContext.Max(x => x.Quantity);
+                if (dataBaseContext.Count() != 0)
+                    quantityTo = dataBaseContext.Max(x => x.Quantity);
             }
 
             if (weightTo == 0)
             {
-                weightTo = dataBaseContext.Max(x => x.Weight);
+                if (dataBaseContext.Count() != 0)
+                    weightTo = dataBaseContext.Max(x => x.Weight);
             }
 
             dataBaseContext = dataBaseContext.Where(x => x.Quantity >= quantityFrom);
@@ -121,7 +123,7 @@ namespace RockPub.Controllers
         // GET: Dishes/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();
         }
 
@@ -138,7 +140,7 @@ namespace RockPub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", dish.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
             return View(dish);
         }
 
@@ -155,7 +157,7 @@ namespace RockPub.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", dish.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
             return View(dish);
         }
 
@@ -191,7 +193,7 @@ namespace RockPub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", dish.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
             return View(dish);
         }
 

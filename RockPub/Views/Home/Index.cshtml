@@ -3,6 +3,31 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="form-group">
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select PositionName as 'Position name', COUNT(Staffs.StaffId) as 'Quantity of staff' from Positions
+left join Staffs on Staffs.PositionId = Positions.PositionId
+group by PositionName" asp-controller="Home">Запит на отримання усіх посад (назва посади, кількість людей на даній посаді)</a>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Concat(Staffs.Surname, ' ', Staffs.Name, ' ', Staffs.Patronymic) as Staff, PositionName, Email, Phone, SUM(Dishes.Quantity * Dishes.Cost) as 'Earnings from orders' from Staffs
+left join Orders on Orders.StaffId = Staffs.StaffId
+left join Positions on Staffs.PositionId = Positions.PositionId
+left join DishOrders on DishOrders.OrderId = Orders.OrderId
+left join Dishes on DishOrders.DishId = Dishes.DishId
+group by Email, Phone, Staffs.Surname, Staffs.Name, Staffs.Patronymic, Orders.Date, Orders.StaffId, PositionName
+HAVING Orders.Date Between DATEADD(month, -1, GETDATE()) AND DATEADD(month, 1, GETDATE()) OR Orders.StaffId is null" asp-controller="Home">Запит на отримання працівників та їхної заробітної плати за останній місяць (ПІБ працівника, посада, електронна пошта, телефон, сумма отримання з замовлень за останній місяць)</a>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select HallName, COUNT(Orders.OrderId) as 'Quantity of orders in that hall' from Halls
+left join Places on Halls.HallId = Places.HallId
+left join Orders on Orders.PlaceId = Places.PlaceId
+group by HallName
+order by 'Quantity of orders in that hall' DESC" asp-controller="Home">Запит на отримання усіх залів, де буде виведено назву залу, а також кількість замовлень у даному залі. Першими виведене найпопулярніші зали</a>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Orders.OrderId, Orders.Date, Note, SUM((Dishes.Kilocalories / 100) * Weight * DishOrders.Quantity) as Kilocalories from Orders
+left join DishOrders on DishOrders.OrderId = Orders.OrderId
+left join Dishes on Dishes.DishId = DishOrders.DishId
+group by Orders.OrderId, Orders.Date, Note" asp-controller="Home">Запит на отримання замовлень, де буде виведено номер замовлення, дата замовлення, коментар замовлення та кількість кілокалорій у даному замовлені</a>
+    </div>
 </div>

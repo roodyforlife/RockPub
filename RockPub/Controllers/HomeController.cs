@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using RockPub.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,72 +17,42 @@ namespace RockPub.Controllers
             return View();
         }
 
-        // GET: HomeController/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Request(string request)
         {
-            return View();
-        }
+            // string connectionString = $"Server=(localdb)\\mssqllocaldb;Database=RockPub;Trusted_Connection=True;";
+            string connectionString = $"Server=DESKTOP-I75L3P7;Database=RockPub;Trusted_Connection=True;Encrypt=False;";
 
-        // GET: HomeController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(request, connection);
+                    var result = new RequestViewModel();
+                    var reader = command.ExecuteReader();
+                    result.Displays = new string[reader.FieldCount];
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        result.Displays[i] = reader.GetName(i);
+                    }
 
-        // POST: HomeController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+                    while (reader.Read())
+                    {
+                        string[] value = new string[reader.FieldCount];
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            value[i] = reader.GetValue(i).ToString();
+                        }
 
-        // GET: HomeController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+                        result.Result.Add(value);
+                    }
 
-        // POST: HomeController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: HomeController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: HomeController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                    return View(result);
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
         }
     }

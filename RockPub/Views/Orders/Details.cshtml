@@ -96,50 +96,56 @@
                 <th>
                     @Html.DisplayNameFor(model => model.DishOrders.First().Dish.Category)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DishOrders.First().Quantity)
+                </th>
                 <th class="createPdfBlock"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.DishOrders)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Quantity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Cost)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Kilocalories)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Protein)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Fat)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Carbohydrates)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Weight)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.CreateDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Dish.Category.CategoryId)
-                    </td>
-                    <td class="createPdfBlock">
-                        <a asp-action="Details" asp-controller="Dishes" asp-route-id="@item.Dish.DishId">Details</a> |
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Cost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Kilocalories)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Protein)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Fat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Carbohydrates)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dish.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td class="createPdfBlock">
+                    <a asp-action="Details" asp-controller="Dishes" asp-route-id="@item.Dish.DishId">Details</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

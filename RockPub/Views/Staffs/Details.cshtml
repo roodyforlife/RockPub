@@ -62,7 +62,7 @@
             @Html.DisplayNameFor(model => model.Position)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Position.PositionId)
+            @Html.DisplayFor(model => model.Position.PositionName)
         </dd>
     </dl>
 </div>
@@ -102,7 +102,7 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Place.PlaceId)
+                    @Html.DisplayFor(modelItem => item.Place.PlaceNumber)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.IsCompleted)

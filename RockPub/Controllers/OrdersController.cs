@@ -52,8 +52,8 @@ namespace RockPub.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceId");
-            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "StaffId");
+            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceNumber");
+            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "Email");
             return View();
         }
 
@@ -70,8 +70,8 @@ namespace RockPub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceId", order.PlaceId);
-            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "StaffId", order.StaffId);
+            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceNumber", order.PlaceId);
+            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "Email", order.StaffId);
             return View(order);
         }
 
@@ -88,8 +88,8 @@ namespace RockPub.Controllers
             {
                 return NotFound();
             }
-            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceId", order.PlaceId);
-            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "StaffId", order.StaffId);
+            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceNumber", order.PlaceId);
+            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "Email", order.StaffId);
             return View(order);
         }
 
@@ -125,8 +125,8 @@ namespace RockPub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceId", order.PlaceId);
-            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "StaffId", order.StaffId);
+            ViewData["PlaceId"] = new SelectList(_context.Places, "PlaceId", "PlaceNumber", order.PlaceId);
+            ViewData["StaffId"] = new SelectList(_context.Staffs, "StaffId", "Email", order.StaffId);
             return View(order);
         }
 

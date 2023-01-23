@@ -46,6 +46,7 @@ namespace RockPub.Controllers
 
             if (salaryTo == 0)
             {
+                if (dataBaseContext.Count() != 0)
                 salaryTo = dataBaseContext.Max(x => x.Salary);
             }
 
@@ -119,6 +120,7 @@ namespace RockPub.Controllers
             var staff = await _context.Staffs
                 .Include(s => s.Position)
                 .Include(x => x.Orders)
+                .ThenInclude(x => x.Place)
                 .FirstOrDefaultAsync(m => m.StaffId == id);
             if (staff == null)
             {
@@ -131,7 +133,7 @@ namespace RockPub.Controllers
         // GET: Staffs/Create
         public IActionResult Create()
         {
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId");
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName");
             return View();
         }
 
@@ -142,13 +144,19 @@ namespace RockPub.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StaffId,Name,Surname,Patronymic,BirthdayDate,Salary,Phone,Email,EmploymentDate,PositionId")] Staff staff)
         {
+            var dataContextStaff = await _context.Staffs.FirstOrDefaultAsync(x => x.Email == staff.Email);
+            if (dataContextStaff is not null)
+            {
+                ModelState.AddModelError("Email", "Email already taken");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(staff);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", staff.PositionId);
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName", staff.PositionId);
             return View(staff);
         }
 
@@ -165,7 +173,7 @@ namespace RockPub.Controllers
             {
                 return NotFound();
             }
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", staff.PositionId);
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName", staff.PositionId);
             return View(staff);
         }
 
@@ -201,7 +209,7 @@ namespace RockPub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", staff.PositionId);
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName", staff.PositionId);
             return View(staff);
         }
 

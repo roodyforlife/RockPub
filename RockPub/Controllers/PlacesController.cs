@@ -32,7 +32,7 @@ namespace RockPub.Controllers
                 places = places.Where(x => x.Hall.HallName.Contains(hallName));
             }
 
-            if(placeNumber != 0)
+            if (placeNumber != 0)
             {
                 places = places.Where(x => x.PlaceNumber == placeNumber);
             }
@@ -80,7 +80,7 @@ namespace RockPub.Controllers
             }
 
             var place = await _context.Places
-                .Include(x => x.Hall)
+                .Include(p => p.Hall)
                 .FirstOrDefaultAsync(m => m.PlaceId == id);
             if (place == null)
             {
@@ -93,6 +93,7 @@ namespace RockPub.Controllers
         // GET: Places/Create
         public IActionResult Create()
         {
+            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallName");
             return View();
         }
 
@@ -101,7 +102,7 @@ namespace RockPub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlaceId,PlaceNumber")] Place place)
+        public async Task<IActionResult> Create([Bind("PlaceId,PlaceNumber,HallId")] Place place)
         {
             if (ModelState.IsValid)
             {
@@ -109,6 +110,7 @@ namespace RockPub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallName", place.HallId);
             return View(place);
         }
 
@@ -125,6 +127,7 @@ namespace RockPub.Controllers
             {
                 return NotFound();
             }
+            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallName", place.HallId);
             return View(place);
         }
 
@@ -133,7 +136,7 @@ namespace RockPub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlaceId,PlaceNumber")] Place place)
+        public async Task<IActionResult> Edit(int id, [Bind("PlaceId,PlaceNumber,HallId")] Place place)
         {
             if (id != place.PlaceId)
             {
@@ -160,6 +163,7 @@ namespace RockPub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallName", place.HallId);
             return View(place);
         }
 
@@ -172,6 +176,7 @@ namespace RockPub.Controllers
             }
 
             var place = await _context.Places
+                .Include(p => p.Hall)
                 .FirstOrDefaultAsync(m => m.PlaceId == id);
             if (place == null)
             {

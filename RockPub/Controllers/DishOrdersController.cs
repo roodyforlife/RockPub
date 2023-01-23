@@ -49,7 +49,7 @@ namespace RockPub.Controllers
         // GET: DishOrders/Create
         public IActionResult Create()
         {
-            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "DishId");
+            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "Name");
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId");
             return View();
         }
@@ -67,7 +67,7 @@ namespace RockPub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "DishId", dishOrder.DishId);
+            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "Name", dishOrder.DishId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", dishOrder.OrderId);
             return View(dishOrder);
         }
@@ -85,7 +85,7 @@ namespace RockPub.Controllers
             {
                 return NotFound();
             }
-            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "DishId", dishOrder.DishId);
+            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "Name", dishOrder.DishId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", dishOrder.OrderId);
             return View(dishOrder);
         }
@@ -122,7 +122,7 @@ namespace RockPub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "DishId", dishOrder.DishId);
+            ViewData["DishId"] = new SelectList(_context.Dishes, "DishId", "Name", dishOrder.DishId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", dishOrder.OrderId);
             return View(dishOrder);
         }
