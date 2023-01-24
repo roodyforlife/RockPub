@@ -110,6 +110,7 @@ namespace RockPub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallName", place.HallId);
             return View(place);
         }
@@ -161,6 +162,7 @@ namespace RockPub.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallName", place.HallId);
