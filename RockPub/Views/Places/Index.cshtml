@@ -6,6 +6,30 @@
 
 <h1>Index</h1>
 
+<form asp-action="Index" method="post">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Hall name</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Default" value="@ViewBag.HallName" name="hallName" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend ml-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Place number</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Default" value="@ViewBag.PlaceNumber" name="placeNumber" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend ml-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Sort</span>
+        </div>
+        <select class="custom-select" name="sort" id="inputGroupSelect01" asp-items="@ViewBag.Sort"></select>
+    </div>
+
+    <div class="input-group mb-3">
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+</form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

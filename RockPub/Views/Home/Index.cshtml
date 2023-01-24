@@ -9,7 +9,7 @@ left join Staffs on Staffs.PositionId = Positions.PositionId
 group by PositionName" asp-controller="Home">Запит на отримання усіх посад (назва посади, кількість людей на даній посаді)</a>
     </div>
     <div class="form-group">
-        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Concat(Staffs.Surname, ' ', Staffs.Name, ' ', Staffs.Patronymic) as Staff, PositionName, Email, Phone, SUM(Dishes.Quantity * Dishes.Cost) as 'Earnings from orders' from Staffs
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Concat(Staffs.Surname, ' ', Staffs.Name, ' ', Staffs.Patronymic) as Staff, PositionName, Email, Phone, SUM(DishOrders.Quantity * Dishes.Cost) as 'Earnings from orders' from Staffs
 left join Orders on Orders.StaffId = Staffs.StaffId
 left join Positions on Staffs.PositionId = Positions.PositionId
 left join DishOrders on DishOrders.OrderId = Orders.OrderId

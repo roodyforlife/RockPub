@@ -21,7 +21,7 @@ namespace RockPub.Models
         public int Cost { get; set; }
         [Display(Name = "Kilocalories per 100 gramm")]
         [Required(ErrorMessage = "Empty field")]
-        public double Kilocalories { get; set; } // Kilocalories per 100 gramm
+        public double Kilocalories { get; set; }
         [Display(Name = "Protein per 100 gramm")]
         [Required(ErrorMessage = "Empty field")]
         public double Protein { get; set; }
